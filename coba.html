@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Diagram Perpustakaan SMPN 18 Surabaya</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background: #f8fafc; color: #0f172a; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        h1 { text-align: center; color: #1e293b; margin-bottom: 10px; font-size: 2rem; }
+        .subtitle { text-align: center; color: #64748b; margin-bottom: 30px; font-size: 0.9rem; }
+        .mermaid { display: flex; justify-content: center; overflow-x: auto; }
+        h2 { color: #1e293b; margin-top: 40px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0 30px; font-size: 0.85rem; }
+        th { background: #f1f5f9; text-align: left; padding: 10px 12px; border: 1px solid #e2e8f0; font-weight: 600; }
+        td { padding: 8px 12px; border: 1px solid #e2e8f0; vertical-align: top; }
+        tr:nth-child(even) { background: #f8fafc; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
+        .badge-1n { background: #dbeafe; color: #1d4ed8; }
+        .badge-mn { background: #f3e8ff; color: #7c3aed; }
+        .note { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 0.85rem; }
+        .note-blue { background: #eff6ff; border-left: 4px solid #3b82f6; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Class Diagram — Perpustakaan Digital SMPN 18 Surabaya</h1>
+    <p class="subtitle">Diagram UML dengan atribut dan method/operasi setiap entitas beserta relasi antar kelas.</p>
+
+    <div class="mermaid">
+        classDiagram
+            direction TB
+
+            class Kelas {
+                -int id
+                -String nama_kelas
+                +daftarSiswa() List~Pengguna~
+            }
+
+            class Pengguna {
+                -int id
+                -String nama
+                -String email
+                -String telepon
+                -String kode_qr
+                -Enum peran
+                -int kelas_id
+                -Boolean sudah_disetujui
+                -String kata_sandi
+                +pinjamBuku(buku) Peminjaman
+                +pinjamDigital(buku) Peminjaman
+                +kembalikanBuku(peminjaman) bool
+                +masukDaftarTunggu(buku) DaftarTunggu
+                +favoritkanBuku(buku) Favorit
+                +cekPeran() String
+                +cekSudahFavorit(buku) bool
+                +lihatRiwayatPinjam() List~Peminjaman~
+            }
+
+            class Kategori {
+                -int id
+                -String nama
+                -Text deskripsi
+                +daftarBuku() List~Buku~
+                +hitungJumlahBuku() int
+            }
+
+            class Rak {
+                -int id
+                -String nama
+                -String kode_lokasi
+                -Text deskripsi
+                +daftarBuku() List~Buku~
+                +hitungJumlahBuku() int
+            }
+
+            class Penerbit {
+                -int id
+                -String nama
+                -String alamat
+                -String telepon
+                -String email
+                +daftarBuku() List~Buku~
+                +hitungJumlahBuku() int
+            }
+
+            class Penulis {
+                -int id
+                -String nama
+                -Text biografi
+                -String foto
+                +daftarKarya() List~Buku~
+                +hitungJumlahKarya() int
+            }
+
+            class Buku {
+                -int id
+                -String judul
+                -int penerbit_id
+                -int tahun
+                -int kategori_id
+                -int rak_id
+                -int jumlah_pinjam
+                -String path_file
+                -String gambar_sampul
+                -Text sinopsis
+                +cekStok() int
+                +cekTersedia() bool
+                +tambahEksemplar(jumlah) void
+                +daftarPenulis() List~Penulis~
+                +daftarEksemplar() List~EksemplarBuku~
+                +daftarPeminjaman() List~Peminjaman~
+                +hitungDipinjam() int
+            }
+
+            class BukuPenulis {
+                &lt;&lt;Pivot Table&gt;&gt;
+                -int id
+                -int buku_id
+                -int penulis_id
+            }
+
+            class EksemplarBuku {
+                -int id
+                -int buku_id
+                -String kode_barcode
+                -Enum status
+                +ubahStatus(status) void
+                +cekTersedia() bool
+                +daftarRiwayatPinjam() List~Peminjaman~
+            }
+
+            class Peminjaman {
+                -int id
+                -String nomor_invoice
+                -int pengguna_id
+                -int buku_id
+                -int eksemplar_id
+                -String tipe
+                -Date tanggal_pinjam
+                -Date tanggal_kembali_rencana
+                -Date tanggal_kembali_aktual
+                -Enum status
+                -Boolean terlambat
+                -Text catatan
+                -int halaman_terakhir_dibaca
+                +buatInvoiceFisik() String
+                +buatInvoiceDigital() String
+                +prosesPengembalian() bool
+                +setujuiPeminjaman() void
+                +tolakPeminjaman() void
+                +cekTerlambat() bool
+                +cekDigital() bool
+                +cekFisik() bool
+                +simpanProgressBaca(halaman) void
+            }
+
+            class DaftarTunggu {
+                -int id
+                -int pengguna_id
+                -int buku_id
+                -Enum status
+                +prosesAntrian() Peminjaman
+                +batalkanAntrian() void
+            }
+
+            class Favorit {
+                -int id
+                -int pengguna_id
+                -int buku_id
+                +tambahFavorit() void
+                +hapusFavorit() void
+            }
+
+            class Pengaturan {
+                -int id
+                -String kunci
+                -Text nilai
+                +ambilNilai(kunci, default) String
+                +simpanPengaturan(kunci, nilai) void
+            }
+
+            Kelas "1" -- "0..*" Pengguna : memiliki
+            Pengguna "1" -- "0..*" Peminjaman : melakukan
+            Pengguna "1" -- "0..*" DaftarTunggu : mengantri
+            Pengguna "1" -- "0..*" Favorit : menyimpan
+
+            Kategori "1" -- "0..*" Buku : mengkategorikan
+            Rak "1" -- "0..*" Buku : menyimpan
+            Penerbit "1" -- "0..*" Buku : menerbitkan
+
+            Buku "0..*" -- "0..*" Penulis : ditulis oleh
+            Buku "1" -- "0..*" EksemplarBuku : memiliki salinan
+            Buku "1" -- "0..*" Peminjaman : dipinjam via
+            Buku "1" -- "0..*" DaftarTunggu : ditunggu via
+            Buku "1" -- "0..*" Favorit : difavoritkan via
+
+            EksemplarBuku "1" -- "0..*" Peminjaman : digunakan di
+
+            BukuPenulis ..> Buku : buku_id
+            BukuPenulis ..> Penulis : penulis_id
+    </div>
+
+    <h2>Penjelasan Method / Operasi</h2>
+    <div class="note note-blue">
+        <strong>Keterangan Notasi UML:</strong> Tanda <code>+</code> = public, <code>-</code> = private. Bagian atas class berisi <strong>atribut</strong>, bagian bawah berisi <strong>method/operasi</strong> (perilaku yang bisa dilakukan oleh class tersebut).
+    </div>
+
+    <table>
+        <thead><tr><th>Class</th><th>Method</th><th>Keterangan</th></tr></thead>
+        <tbody>
+            <tr><td rowspan="8"><strong>Pengguna</strong></td><td><code>+pinjamBuku(buku)</code></td><td>Membuat peminjaman fisik baru, mengecek stok, meng-assign eksemplar</td></tr>
+            <tr><td><code>+pinjamDigital(buku)</code></td><td>Membuat peminjaman digital, mengecek ketersediaan file PDF</td></tr>
+            <tr><td><code>+kembalikanBuku(peminjaman)</code></td><td>Mengembalikan buku, update status eksemplar, proses antrian waitlist</td></tr>
+            <tr><td><code>+masukDaftarTunggu(buku)</code></td><td>Mendaftarkan diri ke antrian jika stok buku habis</td></tr>
+            <tr><td><code>+favoritkanBuku(buku)</code></td><td>Menambahkan/menghapus buku dari daftar favorit (toggle)</td></tr>
+            <tr><td><code>+cekPeran()</code></td><td>Mengembalikan nama peran: Super Admin, Pengurus, atau Siswa</td></tr>
+            <tr><td><code>+cekSudahFavorit(buku)</code></td><td>Mengecek apakah pengguna sudah memfavoritkan buku tertentu</td></tr>
+            <tr><td><code>+lihatRiwayatPinjam()</code></td><td>Menampilkan seluruh riwayat peminjaman pengguna</td></tr>
+
+            <tr><td><strong>Kelas</strong></td><td><code>+daftarSiswa()</code></td><td>Menampilkan semua siswa yang terdaftar di kelas ini</td></tr>
+
+            <tr><td rowspan="2"><strong>Kategori</strong></td><td><code>+daftarBuku()</code></td><td>Menampilkan semua buku dalam kategori ini</td></tr>
+            <tr><td><code>+hitungJumlahBuku()</code></td><td>Menghitung total buku dalam kategori</td></tr>
+
+            <tr><td rowspan="2"><strong>Rak</strong></td><td><code>+daftarBuku()</code></td><td>Menampilkan semua buku di rak ini</td></tr>
+            <tr><td><code>+hitungJumlahBuku()</code></td><td>Menghitung total buku di rak</td></tr>
+
+            <tr><td rowspan="2"><strong>Penerbit</strong></td><td><code>+daftarBuku()</code></td><td>Menampilkan semua buku yang diterbitkan</td></tr>
+            <tr><td><code>+hitungJumlahBuku()</code></td><td>Menghitung total buku terbitan</td></tr>
+
+            <tr><td rowspan="2"><strong>Penulis</strong></td><td><code>+daftarKarya()</code></td><td>Menampilkan semua buku karya penulis ini</td></tr>
+            <tr><td><code>+hitungJumlahKarya()</code></td><td>Menghitung total buku yang ditulis</td></tr>
+
+            <tr><td rowspan="7"><strong>Buku</strong></td><td><code>+cekStok()</code></td><td>Menghitung jumlah eksemplar yang berstatus 'tersedia'</td></tr>
+            <tr><td><code>+cekTersedia()</code></td><td>Mengecek apakah ada minimal 1 eksemplar yang tersedia</td></tr>
+            <tr><td><code>+tambahEksemplar(jumlah)</code></td><td>Menambahkan eksemplar baru dengan auto-generate barcode</td></tr>
+            <tr><td><code>+daftarPenulis()</code></td><td>Menampilkan semua penulis buku ini</td></tr>
+            <tr><td><code>+daftarEksemplar()</code></td><td>Menampilkan semua salinan fisik buku ini</td></tr>
+            <tr><td><code>+daftarPeminjaman()</code></td><td>Menampilkan semua riwayat peminjaman buku ini</td></tr>
+            <tr><td><code>+hitungDipinjam()</code></td><td>Menghitung total berapa kali buku ini pernah dipinjam</td></tr>
+
+            <tr><td rowspan="3"><strong>EksemplarBuku</strong></td><td><code>+ubahStatus(status)</code></td><td>Mengubah status eksemplar (tersedia/dipinjam/hilang/rusak)</td></tr>
+            <tr><td><code>+cekTersedia()</code></td><td>Mengecek apakah eksemplar ini berstatus 'tersedia'</td></tr>
+            <tr><td><code>+daftarRiwayatPinjam()</code></td><td>Menampilkan riwayat semua peminjaman eksemplar ini</td></tr>
+
+            <tr><td rowspan="9"><strong>Peminjaman</strong></td><td><code>+buatInvoiceFisik()</code></td><td>Generate nomor invoice fisik: INV-YYYYMMDD-XXX</td></tr>
+            <tr><td><code>+buatInvoiceDigital()</code></td><td>Generate nomor invoice digital: DIG-YYYYMMDD-XXX</td></tr>
+            <tr><td><code>+prosesPengembalian()</code></td><td>Proses pengembalian: update status, cek keterlambatan, proses waitlist otomatis</td></tr>
+            <tr><td><code>+setujuiPeminjaman()</code></td><td>ACC permintaan pinjam: ubah status pending → dipinjam</td></tr>
+            <tr><td><code>+tolakPeminjaman()</code></td><td>Tolak permintaan pinjam: ubah status → rejected, bebaskan eksemplar</td></tr>
+            <tr><td><code>+cekTerlambat()</code></td><td>Cek apakah tanggal sekarang melewati batas pengembalian</td></tr>
+            <tr><td><code>+cekDigital()</code></td><td>Cek apakah tipe peminjaman = digital</td></tr>
+            <tr><td><code>+cekFisik()</code></td><td>Cek apakah tipe peminjaman = physical</td></tr>
+            <tr><td><code>+simpanProgressBaca(halaman)</code></td><td>Menyimpan halaman terakhir yang dibaca (untuk e-book)</td></tr>
+
+            <tr><td rowspan="2"><strong>DaftarTunggu</strong></td><td><code>+prosesAntrian()</code></td><td>Mengalokasikan eksemplar ke antrian berikutnya secara otomatis</td></tr>
+            <tr><td><code>+batalkanAntrian()</code></td><td>Membatalkan antrian dan mengubah status → cancelled</td></tr>
+
+            <tr><td rowspan="2"><strong>Favorit</strong></td><td><code>+tambahFavorit()</code></td><td>Menyimpan buku ke daftar favorit pengguna</td></tr>
+            <tr><td><code>+hapusFavorit()</code></td><td>Menghapus buku dari daftar favorit pengguna</td></tr>
+
+            <tr><td rowspan="2"><strong>Pengaturan</strong></td><td><code>+ambilNilai(kunci, default)</code></td><td>Mengambil nilai konfigurasi berdasarkan kunci</td></tr>
+            <tr><td><code>+simpanPengaturan(kunci, nilai)</code></td><td>Menyimpan atau memperbarui nilai konfigurasi</td></tr>
+        </tbody>
+    </table>
+
+    <h2>Penjelasan Relasi</h2>
+    <table>
+        <thead><tr><th>No</th><th>Dari</th><th>Ke</th><th>Tipe</th><th>Foreign Key</th><th>Keterangan</th></tr></thead>
+        <tbody>
+            <tr><td>1</td><td>Kelas</td><td>Pengguna</td><td><span class="badge badge-1n">1:N</span></td><td>pengguna.kelas_id</td><td>Satu kelas memiliki banyak siswa</td></tr>
+            <tr><td>2</td><td>Pengguna</td><td>Peminjaman</td><td><span class="badge badge-1n">1:N</span></td><td>peminjaman.pengguna_id</td><td>Satu pengguna bisa punya banyak peminjaman</td></tr>
+            <tr><td>3</td><td>Pengguna</td><td>DaftarTunggu</td><td><span class="badge badge-1n">1:N</span></td><td>daftar_tunggu.pengguna_id</td><td>Satu pengguna bisa mengantri banyak buku</td></tr>
+            <tr><td>4</td><td>Pengguna</td><td>Favorit</td><td><span class="badge badge-1n">1:N</span></td><td>favorit.pengguna_id</td><td>Satu pengguna bisa memfavoritkan banyak buku</td></tr>
+            <tr><td>5</td><td>Kategori</td><td>Buku</td><td><span class="badge badge-1n">1:N</span></td><td>buku.kategori_id</td><td>Satu kategori menaungi banyak buku</td></tr>
+            <tr><td>6</td><td>Rak</td><td>Buku</td><td><span class="badge badge-1n">1:N</span></td><td>buku.rak_id</td><td>Satu rak menyimpan banyak buku</td></tr>
+            <tr><td>7</td><td>Penerbit</td><td>Buku</td><td><span class="badge badge-1n">1:N</span></td><td>buku.penerbit_id</td><td>Satu penerbit menerbitkan banyak buku</td></tr>
+            <tr><td>8</td><td>Buku</td><td>Penulis</td><td><span class="badge badge-mn">M:N</span></td><td>pivot buku_penulis</td><td>Satu buku bisa ditulis &ge;1 penulis, dan sebaliknya</td></tr>
+            <tr><td>9</td><td>Buku</td><td>EksemplarBuku</td><td><span class="badge badge-1n">1:N</span></td><td>eksemplar_buku.buku_id</td><td>Satu judul buku punya banyak salinan fisik</td></tr>
+            <tr><td>10</td><td>Buku</td><td>Peminjaman</td><td><span class="badge badge-1n">1:N</span></td><td>peminjaman.buku_id</td><td>Satu buku bisa dipinjam berkali-kali</td></tr>
+            <tr><td>11</td><td>Buku</td><td>DaftarTunggu</td><td><span class="badge badge-1n">1:N</span></td><td>daftar_tunggu.buku_id</td><td>Satu buku bisa punya banyak antrian</td></tr>
+            <tr><td>12</td><td>Buku</td><td>Favorit</td><td><span class="badge badge-1n">1:N</span></td><td>favorit.buku_id</td><td>Satu buku bisa difavoritkan banyak pengguna</td></tr>
+            <tr><td>13</td><td>EksemplarBuku</td><td>Peminjaman</td><td><span class="badge badge-1n">1:N</span></td><td>peminjaman.eksemplar_id</td><td>Satu eksemplar bisa dipakai di banyak transaksi bergantian</td></tr>
+        </tbody>
+    </table>
+
+    <h2>Keterangan Enum</h2>
+    <table>
+        <thead><tr><th>Atribut</th><th>Nilai yang Diizinkan</th></tr></thead>
+        <tbody>
+            <tr><td>Pengguna.peran</td><td><code>superadmin</code> · <code>admin</code> · <code>siswa</code></td></tr>
+            <tr><td>EksemplarBuku.status</td><td><code>tersedia</code> · <code>dipinjam</code> · <code>hilang</code> · <code>rusak</code></td></tr>
+            <tr><td>Peminjaman.status</td><td><code>dipinjam</code> · <code>dikembalikan</code> · <code>terlambat</code> · <code>booking</code> · <code>pending</code> · <code>cancelled</code></td></tr>
+            <tr><td>DaftarTunggu.status</td><td><code>waiting</code> · <code>assigned</code> · <code>cancelled</code></td></tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>Catatan Desain:</strong> Entitas <strong>Pengaturan</strong> berdiri sendiri tanpa relasi (tabel key-value untuk konfigurasi global). Tabel <strong>BukuPenulis</strong> adalah pivot table untuk relasi Many-to-Many antara Buku dan Penulis, tanpa method tersendiri.
+    </div>
+</div>
+
+<script>
+    mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose', class: { useMaxWidth: false } });
+</script>
+</body>
+</html>
+
