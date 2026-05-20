@@ -1,310 +1,1204 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Diagram Perpustakaan SMPN 18 Surabaya</title>
+    <title>UML Class Diagram - Perpustakaan SMPN 18 Surabaya</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Mermaid.js -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            flowchart: { useMaxWidth: true, htmlLabels: true }
+        });
+    </script>
+    <!-- Custom CSS -->
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background: #f8fafc; color: #0f172a; }
-        .container { max-width: 1400px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
-        h1 { text-align: center; color: #1e293b; margin-bottom: 10px; font-size: 2rem; }
-        .subtitle { text-align: center; color: #64748b; margin-bottom: 30px; font-size: 0.9rem; }
-        .mermaid { display: flex; justify-content: center; overflow-x: auto; }
-        h2 { color: #1e293b; margin-top: 40px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
-        table { width: 100%; border-collapse: collapse; margin: 16px 0 30px; font-size: 0.85rem; }
-        th { background: #f1f5f9; text-align: left; padding: 10px 12px; border: 1px solid #e2e8f0; font-weight: 600; }
-        td { padding: 8px 12px; border: 1px solid #e2e8f0; vertical-align: top; }
-        tr:nth-child(even) { background: #f8fafc; }
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
-        .badge-1n { background: #dbeafe; color: #1d4ed8; }
-        .badge-mn { background: #f3e8ff; color: #7c3aed; }
-        .note { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 0.85rem; }
-        .note-blue { background: #eff6ff; border-left: 4px solid #3b82f6; }
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-secondary: #111827;
+            --bg-tertiary: #1f2937;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-light: rgba(99, 102, 241, 0.1);
+            --accent: #10b981;
+            --accent-light: rgba(16, 185, 129, 0.1);
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            --sidebar-width: 280px;
+        }
+
+        .light {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(0, 0, 0, 0.06);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: rgba(79, 70, 229, 0.08);
+            --accent: #059669;
+            --accent-light: rgba(5, 150, 105, 0.08);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.25s, border-color 0.25s, color 0.25s;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* App Container */
+        .app-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Style */
+        aside {
+            width: var(--sidebar-width);
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), #ec4899);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, var(--primary), #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .search-container {
+            padding: 1rem 1.5rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: var(--primary);
+        }
+
+        .class-list-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 1rem;
+        }
+
+        .class-list-header {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            padding: 0.5rem 0.5rem;
+        }
+
+        .class-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 0.75rem;
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            text-decoration: none;
+        }
+
+        .class-item:hover, .class-item.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .class-item .class-badge {
+            font-size: 0.65rem;
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
+            background-color: var(--bg-tertiary);
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        .class-item.active .class-badge {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .sidebar-footer {
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Main Content Style */
+        main {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            max-width: calc(100vw - var(--sidebar-width));
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Toggle Button */
+        .btn-theme {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .btn-theme:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .github-btn {
+            border-color: transparent;
+            background-color: #24292f;
+            color: white;
+        }
+
+        .github-btn:hover {
+            background-color: #3b4045;
+        }
+
+        /* Tabs System */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.75rem 1.25rem;
+            font-family: var(--font-main);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Card Container */
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Visual Diagram Pane */
+        .diagram-container {
+            width: 100%;
+            overflow: auto;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .mermaid-wrapper {
+            transform-origin: top left;
+            transition: transform 0.1s ease-out;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            gap: 0.25rem;
+            padding: 0.25rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 5;
+        }
+
+        .zoom-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .zoom-btn:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* Explorer Layout */
+        .explorer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .explorer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Table Design */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background-color: var(--bg-tertiary);
+            color: var(--text-muted);
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge-vis {
+            font-family: var(--font-mono);
+            font-weight: 800;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .badge-vis.private {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .badge-vis.public {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+        }
+
+        .badge-type {
+            font-family: var(--font-mono);
+            background-color: var(--bg-tertiary);
+            color: var(--primary);
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .name-cell {
+            font-family: var(--font-mono);
+            font-weight: 500;
+        }
+
+        /* Raw Text / Copy Layout */
+        .raw-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .pre-wrapper {
+            position: relative;
+        }
+
+        pre {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        .btn-copy {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            font-family: var(--font-main);
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-copy:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Utilities */
+        .flex-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Toast Alert */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Class Diagram — Perpustakaan Digital SMPN 18 Surabaya</h1>
-    <p class="subtitle">Diagram UML dengan atribut dan method/operasi setiap entitas beserta relasi antar kelas.</p>
 
-    <div class="mermaid">
-        classDiagram
-            direction TB
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside>
+            <div class="sidebar-header">
+                <div class="logo-area">
+                    <div class="logo-icon">U</div>
+                    <div class="logo-text">
+                        <h1>Perpustakaan</h1>
+                        <p>SMPN 18 Surabaya</p>
+                    </div>
+                </div>
+            </div>
 
-            class Kelas {
-                -int id
-                -String nama_kelas
-                +daftarSiswa() List~Pengguna~
-            }
+            <div class="search-container">
+                <input type="text" id="classSearch" class="search-box" placeholder="Cari Class..." onkeyup="filterClasses()">
+            </div>
 
-            class Pengguna {
-                -int id
-                -String nama
-                -String email
-                -String telepon
-                -String kode_qr
-                -Enum peran
-                -int kelas_id
-                -Boolean sudah_disetujui
-                -String kata_sandi
-                +pinjamBuku(buku) Peminjaman
-                +pinjamDigital(buku) Peminjaman
-                +kembalikanBuku(peminjaman) bool
-                +masukDaftarTunggu(buku) DaftarTunggu
-                +favoritkanBuku(buku) Favorit
-                +cekPeran() String
-                +cekSudahFavorit(buku) bool
-                +lihatRiwayatPinjam() List~Peminjaman~
-            }
+            <div class="class-list-container">
+                <div class="class-list-header">Daftar Model / Class</div>
+                <div id="classList">
+                    <!-- Dynamic class items loaded here -->
+                </div>
+            </div>
 
-            class Kategori {
-                -int id
-                -String nama
-                -Text deskripsi
-                +daftarBuku() List~Buku~
-                +hitungJumlahBuku() int
-            }
+            <div class="sidebar-footer">
+                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Tema Sistem</span>
+                <button class="btn-theme" onclick="toggleTheme()" aria-label="Toggle Theme">
+                    <svg id="themeIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="20" height="20">
+                        <!-- Sun Icon for switching to Light, Moon for Dark -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                    </svg>
+                </button>
+            </div>
+        </aside>
 
-            class Rak {
-                -int id
-                -String nama
-                -String kode_lokasi
-                -Text deskripsi
-                +daftarBuku() List~Buku~
-                +hitungJumlahBuku() int
-            }
+        <!-- Main Content Area -->
+        <main>
+            <header>
+                <div class="header-title">
+                    <h2>UML Class Diagram & Explorer</h2>
+                    <p>Sistem Manajemen Database Perpustakaan berbasis standar akademik UML</p>
+                </div>
+                <div class="header-actions">
+                    <button class="tab-btn active" onclick="switchTab(event, 'diagram-tab')">📊 Visual Diagram</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'explorer-tab')">🔍 Class Explorer</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'raw-tab')">📋 Salin Text UML</button>
+                    <button class="tab-btn github-btn" onclick="window.open('https://github.com/Muhammadrifki12345/ClassDiagram', '_blank')">🐙 GitHub</button>
+                </div>
+            </header>
 
-            class Penerbit {
-                -int id
-                -String nama
-                -String alamat
-                -String telepon
-                -String email
-                +daftarBuku() List~Buku~
-                +hitungJumlahBuku() int
-            }
+            <!-- Tab Content: Diagram -->
+            <div id="diagram-tab" class="tab-content active">
+                <div class="diagram-container">
+                    <div class="mermaid-wrapper" id="mermaidWrapper">
+                        <pre class="mermaid">
+classDiagram
+    class User {
+        -id : int
+        -nama : String
+        -email : String
+        -kataSandi : String
+        -peran : String
+        -telepon : String
+        -kodeQr : String
+        -kelasId : int
+        -sudahDisetujui : boolean
+        +getKelas() : Kelas
+        +getLoans() : List~Loan~
+        +getWaitlists() : List~Waitlist~
+        +getFavorites() : List~Favorite~
+        +hasFavorited(book : Book) : boolean
+        +isSuperAdmin() : boolean
+        +isAdmin() : boolean
+        +isSiswa() : boolean
+        +getRoleName() : String
+    }
 
-            class Penulis {
-                -int id
-                -String nama
-                -Text biografi
-                -String foto
-                +daftarKarya() List~Buku~
-                +hitungJumlahKarya() int
-            }
+    class Kelas {
+        -id : int
+        -namaKelas : String
+        +getPengguna() : List~User~
+    }
 
-            class Buku {
-                -int id
-                -String judul
-                -int penerbit_id
-                -int tahun
-                -int kategori_id
-                -int rak_id
-                -int jumlah_pinjam
-                -String path_file
-                -String gambar_sampul
-                -Text sinopsis
-                +cekStok() int
-                +cekTersedia() bool
-                +tambahEksemplar(jumlah) void
-                +daftarPenulis() List~Penulis~
-                +daftarEksemplar() List~EksemplarBuku~
-                +daftarPeminjaman() List~Peminjaman~
-                +hitungDipinjam() int
-            }
+    class Book {
+        -id : int
+        -judul : String
+        -penerbitId : int
+        -tahun : int
+        -kategoriId : int
+        -rakId : int
+        -jumlahPinjam : int
+        -pathFile : String
+        -gambarSampul : String
+        -sinopsis : String
+        +getCategory() : Category
+        +getShelf() : Shelf
+        +getPublisher() : Publisher
+        +getPenulis() : List~Penulis~
+        +getEksemplar() : List~Eksemplar~
+        +getLoans() : List~Loan~
+        +getFavorites() : List~Favorite~
+        +getWaitlists() : List~Waitlist~
+    }
 
-            class BukuPenulis {
-                &lt;&lt;Pivot Table&gt;&gt;
-                -int id
-                -int buku_id
-                -int penulis_id
-            }
+    class Category {
+        -id : int
+        -nama : String
+        -deskripsi : String
+        +getBooks() : List~Book~
+    }
 
-            class EksemplarBuku {
-                -int id
-                -int buku_id
-                -String kode_barcode
-                -Enum status
-                +ubahStatus(status) void
-                +cekTersedia() bool
-                +daftarRiwayatPinjam() List~Peminjaman~
-            }
+    class Shelf {
+        -id : int
+        -nama : String
+        -kodeLokasi : String
+        -deskripsi : String
+        +getBooks() : List~Book~
+    }
 
-            class Peminjaman {
-                -int id
-                -String nomor_invoice
-                -int pengguna_id
-                -int buku_id
-                -int eksemplar_id
-                -String tipe
-                -Date tanggal_pinjam
-                -Date tanggal_kembali_rencana
-                -Date tanggal_kembali_aktual
-                -Enum status
-                -Boolean terlambat
-                -Text catatan
-                -int halaman_terakhir_dibaca
-                +buatInvoiceFisik() String
-                +buatInvoiceDigital() String
-                +prosesPengembalian() bool
-                +setujuiPeminjaman() void
-                +tolakPeminjaman() void
-                +cekTerlambat() bool
-                +cekDigital() bool
-                +cekFisik() bool
-                +simpanProgressBaca(halaman) void
-            }
+    class Publisher {
+        -id : int
+        -nama : String
+        -alamat : String
+        -telepon : String
+        -email : String
+        +getBooks() : List~Book~
+    }
 
-            class DaftarTunggu {
-                -int id
-                -int pengguna_id
-                -int buku_id
-                -Enum status
-                +prosesAntrian() Peminjaman
-                +batalkanAntrian() void
-            }
+    class Penulis {
+        -id : int
+        -nama : String
+        -biografi : String
+        -foto : String
+        +getBooks() : List~Book~
+    }
 
-            class Favorit {
-                -int id
-                -int pengguna_id
-                -int buku_id
-                +tambahFavorit() void
-                +hapusFavorit() void
-            }
+    class Eksemplar {
+        -id : int
+        -bukuId : int
+        -kodeBarcode : String
+        -status : String
+        +getBook() : Book
+        +getPeminjaman() : List~Loan~
+    }
 
-            class Pengaturan {
-                -int id
-                -String kunci
-                -Text nilai
-                +ambilNilai(kunci, default) String
-                +simpanPengaturan(kunci, nilai) void
-            }
+    class Loan {
+        -id : int
+        -penggunaId : int
+        -bukuId : int
+        -eksemplarId : int
+        -tipe : String
+        -nomorInvoice : String
+        -tanggalPinjam : DateTime
+        -tanggalKembaliRencana : DateTime
+        -tanggalKembaliAktual : DateTime
+        -tanggalBooking : DateTime
+        -status : String
+        -terlambat : boolean
+        -catatan : String
+        -halamanTerakhirDibaca : int
+        +generateInvoiceNumber()$ String
+        +generateDigitalInvoiceNumber()$ String
+        +isDigital() : boolean
+        +isPhysical() : boolean
+        +getUser() : User
+        +getBook() : Book
+        +getEksemplar() : Eksemplar
+        +markAsReturned(isAutomatic : boolean) : boolean
+    }
 
-            Kelas "1" -- "0..*" Pengguna : memiliki
-            Pengguna "1" -- "0..*" Peminjaman : melakukan
-            Pengguna "1" -- "0..*" DaftarTunggu : mengantri
-            Pengguna "1" -- "0..*" Favorit : menyimpan
+    class Waitlist {
+        -id : int
+        -penggunaId : int
+        -bukuId : int
+        -status : String
+        +getUser() : User
+        +getBook() : Book
+    }
 
-            Kategori "1" -- "0..*" Buku : mengkategorikan
-            Rak "1" -- "0..*" Buku : menyimpan
-            Penerbit "1" -- "0..*" Buku : menerbitkan
+    class Favorite {
+        -id : int
+        -penggunaId : int
+        -bukuId : int
+        +getUser() : User
+        +getBook() : Book
+    }
 
-            Buku "0..*" -- "0..*" Penulis : ditulis oleh
-            Buku "1" -- "0..*" EksemplarBuku : memiliki salinan
-            Buku "1" -- "0..*" Peminjaman : dipinjam via
-            Buku "1" -- "0..*" DaftarTunggu : ditunggu via
-            Buku "1" -- "0..*" Favorit : difavoritkan via
+    User "1" --> "0..*" Loan
+    User "1" --> "0..*" Waitlist
+    User "1" --> "0..*" Favorite
+    User "0..*" --> "1" Kelas
+    Book "0..*" --> "1" Category
+    Book "0..*" --> "1" Shelf
+    Book "0..*" --> "1" Publisher
+    Book "0..*" --> "0..*" Penulis
+    Book "1" --> "0..*" Eksemplar
+    Book "1" --> "0..*" Loan
+    Book "1" --> "0..*" Favorite
+    Book "1" --> "0..*" Waitlist
+    Eksemplar "1" --> "0..*" Loan
+    Loan "0..*" --> "1" User
+    Loan "0..*" --> "1" Book
+    Loan "0..*" --> "0..1" Eksemplar
+    Waitlist "0..*" --> "1" User
+    Waitlist "0..*" --> "1" Book
+    Favorite "0..*" --> "1" User
+    Favorite "0..*" --> "1" Book
+                        </pre>
+                    </div>
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" onclick="adjustZoom(-0.1)">−</button>
+                        <button class="zoom-btn" onclick="resetZoom()">100%</button>
+                        <button class="zoom-btn" onclick="adjustZoom(0.1)">+</button>
+                    </div>
+                </div>
+            </div>
 
-            EksemplarBuku "1" -- "0..*" Peminjaman : digunakan di
+            <!-- Tab Content: Class Explorer -->
+            <div id="explorer-tab" class="tab-content">
+                <div class="card">
+                    <h3 id="explorerClassName" class="section-title" style="font-size: 1.4rem; color: var(--primary);">Class Name</h3>
+                    <p id="explorerClassDesc" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Pilih kelas di sidebar kiri untuk mulai menjelajah.</p>
+                    
+                    <div class="explorer-grid">
+                        <!-- Attributes Panel -->
+                        <div>
+                            <h4 class="section-title">
+                                <span>📦 Attributes</span>
+                            </h4>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 70px;">Vis</th>
+                                            <th>Atribut</th>
+                                            <th>Tipe Data</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="attributesTable">
+                                        <!-- Loaded dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
-            BukuPenulis ..> Buku : buku_id
-            BukuPenulis ..> Penulis : penulis_id
+                        <!-- Methods Panel -->
+                        <div>
+                            <h4 class="section-title">
+                                <span>⚙️ Methods / Operations</span>
+                            </h4>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 70px;">Vis</th>
+                                            <th>Method</th>
+                                            <th>Tipe Return</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="methodsTable">
+                                        <!-- Loaded dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Raw Copy -->
+            <div id="raw-tab" class="tab-content">
+                <div class="raw-container">
+                    <div class="card">
+                        <h4 class="section-title">Format UML Standard Akademik</h4>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+                            Format siap salin untuk diletakkan di tugas akademik atau proposal proyek Anda.
+                        </p>
+                        <div class="pre-wrapper">
+                            <pre id="rawUmlDisplay">Pilih class terlebih dahulu...</pre>
+                            <button class="btn-copy" onclick="copyRawUml()">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                                Salin UML
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <h2>Penjelasan Method / Operasi</h2>
-    <div class="note note-blue">
-        <strong>Keterangan Notasi UML:</strong> Tanda <code>+</code> = public, <code>-</code> = private. Bagian atas class berisi <strong>atribut</strong>, bagian bawah berisi <strong>method/operasi</strong> (perilaku yang bisa dilakukan oleh class tersebut).
-    </div>
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">Berhasil disalin!</div>
 
-    <table>
-        <thead><tr><th>Class</th><th>Method</th><th>Keterangan</th></tr></thead>
-        <tbody>
-            <tr><td rowspan="8"><strong>Pengguna</strong></td><td><code>+pinjamBuku(buku)</code></td><td>Membuat peminjaman fisik baru, mengecek stok, meng-assign eksemplar</td></tr>
-            <tr><td><code>+pinjamDigital(buku)</code></td><td>Membuat peminjaman digital, mengecek ketersediaan file PDF</td></tr>
-            <tr><td><code>+kembalikanBuku(peminjaman)</code></td><td>Mengembalikan buku, update status eksemplar, proses antrian waitlist</td></tr>
-            <tr><td><code>+masukDaftarTunggu(buku)</code></td><td>Mendaftarkan diri ke antrian jika stok buku habis</td></tr>
-            <tr><td><code>+favoritkanBuku(buku)</code></td><td>Menambahkan/menghapus buku dari daftar favorit (toggle)</td></tr>
-            <tr><td><code>+cekPeran()</code></td><td>Mengembalikan nama peran: Super Admin, Pengurus, atau Siswa</td></tr>
-            <tr><td><code>+cekSudahFavorit(buku)</code></td><td>Mengecek apakah pengguna sudah memfavoritkan buku tertentu</td></tr>
-            <tr><td><code>+lihatRiwayatPinjam()</code></td><td>Menampilkan seluruh riwayat peminjaman pengguna</td></tr>
+    <!-- JavaScript Data and Controller -->
+    <script>
+        const classesData = {
+            User: {
+                name: 'User',
+                desc: 'Representasi data pengguna sistem perpustakaan (siswa, admin, superadmin).',
+                attributes: [
+                    { vis: '-', name: 'id', type: 'int' },
+                    { vis: '-', name: 'nama', type: 'String' },
+                    { vis: '-', name: 'email', type: 'String' },
+                    { vis: '-', name: 'kataSandi', type: 'String' },
+                    { vis: '-', name: 'peran', type: 'String' },
+                    { vis: '-', name: 'telepon', type: 'String' },
+                    { vis: '-', name: 'kodeQr', type: 'String' },
+                    { vis: '-', name: 'kelasId', type: 'int' },
+                    { vis: '-', name: 'sudahDisetujui', type: 'boolean' }
+                ],
+                methods: [
+                    { vis: '+', name: 'getKelas()', type: 'Kelas' },
+                    { vis: '+', name: 'getLoans()', type: 'List<Loan>' },
+                    { vis: '+', name: 'getWaitlists()', type: 'List<Waitlist>' },
+                    { vis: '+', name: 'getFavorites()', type: 'List<Favorite>' },
+                    { vis: '+', name: 'hasFavorited(book : Book)', type: 'boolean' },
+                    { vis: '+', name: 'isSuperAdmin()', type: 'boolean' },
+                    { vis: '+', name: 'isAdmin()', type: 'boolean' },
+                    { vis: '+', name: 'isSiswa()', type: 'boolean' },
+                    { vis: '+', name: 'getRoleName()', type: 'String' }
+                ],
+                raw: `User\n-----------------------------------\n-id : int\n-nama : String\n-email : String\n-kataSandi : String\n-peran : String\n-telepon : String\n-kodeQr : String\n-kelasId : int\n-sudahDisetujui : boolean\n-----------------------------------\n+getKelas() : Kelas\n+getLoans() : List<Loan>\n+getWaitlists() : List<Waitlist>\n+getFavorites() : List<Favorite>\n+hasFavorited(book : Book) : boolean\n+isSuperAdmin() : boolean\n+isAdmin() : boolean\n+isSiswa() : boolean\n+getRoleName() : String`
+            },
+            Kelas: {
+                name: 'Kelas',
+                desc: 'Kelas akademik dari siswa yang meminjam buku.',
+                attributes: [
+                    { vis: '-', name: 'id', type: 'int' },
+                    { vis: '-', name: 'namaKelas', type: 'String' }
+                ],
+                methods: [
+                    { vis: '+', name: 'getPengguna()', type: 'List<User>' }
+                ],
+                raw: `Kelas\n-----------------------------------\n-id : int\n-namaKelas : String\n-----------------------------------\n+getPengguna() : List<User>`
+            },
+            Book: {
+                name: 'Book',
+                desc: 'Informasi data katalog buku fisik maupun buku digital (e-book) yang tersedia di perpustakaan.',
+                attributes: [
+                    { vis: '-', name: 'id', type: 'int' },
+                    { vis: '-', name: 'judul', type: 'String' },
+                    { vis: '-', name: 'penerbitId', type: 'int' },
+                    { vis: '-', name: 'tahun', type: 'int' },
+                    { vis: '-', name: 'kategoriId', type: 'int' },
+                    { vis: '-', name: 'rakId', type: 'int' },
+                    { vis: '-', name: 'jumlahPinjam', type: 'int' },
+                    { vis: '-', name: 'pathFile', type: 'String' },
+                    { vis: '-', name: 'gambarSampul', type: 'String' },
+                    { vis: '-', name: 'sinopsis', type: 'String' }
+                ],
+                methods: [
+                    { vis: '+', name: 'getCategory()', type: 'Category' },
+                    { vis: '+', name: 'getShelf()', type: 'Shelf' },
+                    { vis: '+', name: 'getPublisher()', type: 'Publisher' },
+                    { vis: '+', name: 'getPenulis()', type: 'List<Penulis>' },
+                    { vis: '+', name: 'getEksemplar()', type: 'List<Eksemplar>' },
+                    { vis: '+', name: 'getLoans()', type: 'List<Loan>' },
+                    { vis: '+', name: 'getFavorites()', type: 'List<Favorite>' },
+                    { vis: '+', name: 'getWaitlists()', type: 'List<Waitlist>' }
+                ],
+                raw: `Book\n-----------------------------------\n-id : int\n-judul : String\n-penerbitId : int\n-tahun : int\n-kategoriId : int\n-rakId : int\n-jumlahPinjam : int\n-pathFile : String\n-gambarSampul : String\n-sinopsis : String\n-----------------------------------\n+getCategory() : Category\n+getShelf() : Shelf\n+getPublisher() : Publisher\n+getPenulis() : List<Penulis>\n+getEksemplar() : List<Eksemplar>\n+getLoans() : List<Loan>\n+getFavorites() : List<Favorite>\n+getWaitlists() : List<Waitlist>`
+            },
+            Category: {
+                name: 'Category',
+                desc: 'Kategori atau genre buku (seperti Novel, Komik, Sains, Sejarah).',
+                attributes: [
+                    { vis: '-', name: 'id', type: 'int' },
+                    { vis: '-', name: 'nama', type: 'String' },
+                    { vis: '-', name: 'deskripsi', type: 'String' }
+                ],
+                methods: [
+                    { vis: '+', name: 'getBooks()', type: 'List<Book>' }
+                ],
+                raw: `Category\n-----------------------------------\n-id : int\n-nama : String\n-deskripsi : String\n-----------------------------------\n+getBooks() : List<Book>`
+            },
+            Shelf: {
+                name: 'Shelf',
+                desc: 'Rak penempatan buku fisik beserta kode lokasinya.',
+                attributes: [
+                    { vis: '-', name: 'id', type: 'int' },
+                    { vis: '-', name: 'nama', type: 'String' },
+                    { vis: '-', name: 'kodeLokasi', type: 'String' },
+                    { vis: '-', name: 'deskripsi', type: 'String' }
+                ],
+                methods: [
+                    { vis: '+', name: 'getBooks()', type: 'List<Book>' }
+                ],
+                raw: `Shelf\n-----------------------------------\n-id : int\n-nama : String\n-kodeLokasi : String\n-deskripsi : String\n-----------------------------------\n+getBooks() : List<Book>`
+            },
+            Publisher: {
+                name: 'Publisher',
+                desc: 'Penerbit yang mempublikasikan buku.',
+                attributes: [
+                    { vis: '-', name: 'id', type: 'int' },
+                    { vis: '-', name: 'nama', type: 'String' },
+                    { vis: '-', name: 'alamat', type: 'String' },
+                    { vis: '-', name: 'telepon', type: 'String' },
+                    { vis: '-', name: 'email', type: 'String' }
+                ],
+                methods: [
+                    { vis: '+', name: 'getBooks()', type: 'List<Book>' }
+                ],
+                raw: `Publisher\n-----------------------------------\n-id : int\n-nama : String\n-alamat : String\n-telepon : String\n-email : String\n-----------------------------------\n+getBooks() : List<Book>`
+            },
+            Penulis: {
+                name: 'Penulis',
+                desc: 'Penulis / pengarang buku.',
+                attributes: [
+                    { vis: '-', name: 'id', type: 'int' },
+                    { vis: '-', name: 'nama', type: 'String' },
+                    { vis: '-', name: 'biografi', type: 'String' },
+                    { vis: '-', name: 'foto', type: 'String' }
+                ],
+                methods: [
+                    { vis: '+', name: 'getBooks()', type: 'List<Book>' }
+                ],
+                raw: `Penulis\n-----------------------------------\n-id : int\n-nama : String\n-biografi : String\n-foto : String\n-----------------------------------\n+getBooks() : List<Book>`
+            },
+            Eksemplar: {
+                name: 'Eksemplar',
+                desc: 'Detail fisik salinan buku spesifik yang memiliki kode barcode unik untuk transaksi peminjaman.',
+                attributes: [
+                    { vis: '-', name: 'id', type: 'int' },
+                    { vis: '-', name: 'bukuId', type: 'int' },
+                    { vis: '-', name: 'kodeBarcode', type: 'String' },
+                    { vis: '-', name: 'status', type: 'String' }
+                ],
+                methods: [
+                    { vis: '+', name: 'getBook()', type: 'Book' },
+                    { vis: '+', name: 'getPeminjaman()', type: 'List<Loan>' }
+                ],
+                raw: `Eksemplar\n-----------------------------------\n-id : int\n-bukuId : int\n-kodeBarcode : String\n-status : String\n-----------------------------------\n+getBook() : Book\n+getPeminjaman() : List<Loan>`
+            },
+            Loan: {
+                name: 'Loan',
+                desc: 'Pencatatan aktivitas peminjaman buku baik berbentuk fisik maupun digital.',
+                attributes: [
+                    { vis: '-', name: 'id', type: 'int' },
+                    { vis: '-', name: 'penggunaId', type: 'int' },
+                    { vis: '-', name: 'bukuId', type: 'int' },
+                    { vis: '-', name: 'eksemplarId', type: 'int' },
+                    { vis: '-', name: 'tipe', type: 'String' },
+                    { vis: '-', name: 'nomorInvoice', type: 'String' },
+                    { vis: '-', name: 'tanggalPinjam', type: 'DateTime' },
+                    { vis: '-', name: 'tanggalKembaliRencana', type: 'DateTime' },
+                    { vis: '-', name: 'tanggalKembaliAktual', type: 'DateTime' },
+                    { vis: '-', name: 'tanggalBooking', type: 'DateTime' },
+                    { vis: '-', name: 'status', type: 'String' },
+                    { vis: '-', name: 'terlambat', type: 'boolean' },
+                    { vis: '-', name: 'catatan', type: 'String' },
+                    { vis: '-', name: 'halamanTerakhirDibaca', type: 'int' }
+                ],
+                methods: [
+                    { vis: '+', name: 'generateInvoiceNumber() {static}', type: 'String' },
+                    { vis: '+', name: 'generateDigitalInvoiceNumber() {static}', type: 'String' },
+                    { vis: '+', name: 'isDigital()', type: 'boolean' },
+                    { vis: '+', name: 'isPhysical()', type: 'boolean' },
+                    { vis: '+', name: 'getUser()', type: 'User' },
+                    { vis: '+', name: 'getBook()', type: 'Book' },
+                    { vis: '+', name: 'getEksemplar()', type: 'Eksemplar' },
+                    { vis: '+', name: 'markAsReturned(isAutomatic : boolean)', type: 'boolean' }
+                ],
+                raw: `Loan\n-----------------------------------\n-id : int\n-penggunaId : int\n-bukuId : int\n-eksemplarId : int\n-tipe : String\n-nomorInvoice : String\n-tanggalPinjam : DateTime\n-tanggalKembaliRencana : DateTime\n-tanggalKembaliAktual : DateTime\n-tanggalBooking : DateTime\n-status : String\n-terlambat : boolean\n-catatan : String\n-halamanTerakhirDibaca : int\n-----------------------------------\n+generateInvoiceNumber() : String {static}\n+generateDigitalInvoiceNumber() : String {static}\n+isDigital() : boolean\n+isPhysical() : boolean\n+getUser() : User\n+getBook() : Book\n+getEksemplar() : Eksemplar\n+markAsReturned(isAutomatic : boolean) : boolean`
+            },
+            Waitlist: {
+                name: 'Waitlist',
+                desc: 'Daftar antrean pemesanan buku fisik ketika stok habis.',
+                attributes: [
+                    { vis: '-', name: 'id', type: 'int' },
+                    { vis: '-', name: 'penggunaId', type: 'int' },
+                    { vis: '-', name: 'bukuId', type: 'int' },
+                    { vis: '-', name: 'status', type: 'String' }
+                ],
+                methods: [
+                    { vis: '+', name: 'getUser()', type: 'User' },
+                    { vis: '+', name: 'getBook()', type: 'Book' }
+                ],
+                raw: `Waitlist\n-----------------------------------\n-id : int\n-penggunaId : int\n-bukuId : int\n-status : String\n-----------------------------------\n+getUser() : User\n+getBook() : Book`
+            },
+            Favorite: {
+                name: 'Favorite',
+                desc: 'Buku-buku penanda favorit dari masing-masing pengguna.',
+                attributes: [
+                    { vis: '-', name: 'id', type: 'int' },
+                    { vis: '-', name: 'penggunaId', type: 'int' },
+                    { vis: '-', name: 'bukuId', type: 'int' }
+                ],
+                methods: [
+                    { vis: '+', name: 'getUser()', type: 'User' },
+                    { vis: '+', name: 'getBook()', type: 'Book' }
+                ],
+                raw: `Favorite\n-----------------------------------\n-id : int\n-penggunaId : int\n-bukuId : int\n-----------------------------------\n+getUser() : User\n+getBook() : Book`
+            }
+        };
 
-            <tr><td><strong>Kelas</strong></td><td><code>+daftarSiswa()</code></td><td>Menampilkan semua siswa yang terdaftar di kelas ini</td></tr>
+        let currentSelectedClass = 'User';
+        let currentZoom = 1.0;
 
-            <tr><td rowspan="2"><strong>Kategori</strong></td><td><code>+daftarBuku()</code></td><td>Menampilkan semua buku dalam kategori ini</td></tr>
-            <tr><td><code>+hitungJumlahBuku()</code></td><td>Menghitung total buku dalam kategori</td></tr>
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 110-8 4 4 0 010 8z" />';
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />';
+            }
+        }
 
-            <tr><td rowspan="2"><strong>Rak</strong></td><td><code>+daftarBuku()</code></td><td>Menampilkan semua buku di rak ini</td></tr>
-            <tr><td><code>+hitungJumlahBuku()</code></td><td>Menghitung total buku di rak</td></tr>
+        // Tab Switching Functionality
+        function switchTab(evt, tabId) {
+            const tabcontents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabcontents.length; i++) {
+                tabcontents[i].classList.remove("active");
+            }
+            const tablinks = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
 
-            <tr><td rowspan="2"><strong>Penerbit</strong></td><td><code>+daftarBuku()</code></td><td>Menampilkan semua buku yang diterbitkan</td></tr>
-            <tr><td><code>+hitungJumlahBuku()</code></td><td>Menghitung total buku terbitan</td></tr>
+        // Sidebar render & logic
+        function loadClassList() {
+            const listContainer = document.getElementById('classList');
+            listContainer.innerHTML = '';
+            
+            Object.keys(classesData).forEach(key => {
+                const item = document.createElement('a');
+                item.className = `class-item ${key === currentSelectedClass ? 'active' : ''}`;
+                item.id = `class-item-${key}`;
+                item.onclick = () => selectClass(key);
+                
+                const icon = document.createElement('span');
+                icon.textContent = '📄';
+                
+                const name = document.createElement('span');
+                name.textContent = key;
 
-            <tr><td rowspan="2"><strong>Penulis</strong></td><td><code>+daftarKarya()</code></td><td>Menampilkan semua buku karya penulis ini</td></tr>
-            <tr><td><code>+hitungJumlahKarya()</code></td><td>Menghitung total buku yang ditulis</td></tr>
+                const badge = document.createElement('span');
+                badge.className = 'class-badge';
+                badge.textContent = 'Class';
 
-            <tr><td rowspan="7"><strong>Buku</strong></td><td><code>+cekStok()</code></td><td>Menghitung jumlah eksemplar yang berstatus 'tersedia'</td></tr>
-            <tr><td><code>+cekTersedia()</code></td><td>Mengecek apakah ada minimal 1 eksemplar yang tersedia</td></tr>
-            <tr><td><code>+tambahEksemplar(jumlah)</code></td><td>Menambahkan eksemplar baru dengan auto-generate barcode</td></tr>
-            <tr><td><code>+daftarPenulis()</code></td><td>Menampilkan semua penulis buku ini</td></tr>
-            <tr><td><code>+daftarEksemplar()</code></td><td>Menampilkan semua salinan fisik buku ini</td></tr>
-            <tr><td><code>+daftarPeminjaman()</code></td><td>Menampilkan semua riwayat peminjaman buku ini</td></tr>
-            <tr><td><code>+hitungDipinjam()</code></td><td>Menghitung total berapa kali buku ini pernah dipinjam</td></tr>
+                item.appendChild(icon);
+                item.appendChild(name);
+                item.appendChild(badge);
+                listContainer.appendChild(item);
+            });
+        }
 
-            <tr><td rowspan="3"><strong>EksemplarBuku</strong></td><td><code>+ubahStatus(status)</code></td><td>Mengubah status eksemplar (tersedia/dipinjam/hilang/rusak)</td></tr>
-            <tr><td><code>+cekTersedia()</code></td><td>Mengecek apakah eksemplar ini berstatus 'tersedia'</td></tr>
-            <tr><td><code>+daftarRiwayatPinjam()</code></td><td>Menampilkan riwayat semua peminjaman eksemplar ini</td></tr>
+        function selectClass(className) {
+            currentSelectedClass = className;
+            
+            // Highlight item in sidebar
+            const items = document.getElementsByClassName('class-item');
+            for(let i=0; i<items.length; i++) {
+                items[i].classList.remove('active');
+            }
+            document.getElementById(`class-item-${className}`).classList.add('active');
 
-            <tr><td rowspan="9"><strong>Peminjaman</strong></td><td><code>+buatInvoiceFisik()</code></td><td>Generate nomor invoice fisik: INV-YYYYMMDD-XXX</td></tr>
-            <tr><td><code>+buatInvoiceDigital()</code></td><td>Generate nomor invoice digital: DIG-YYYYMMDD-XXX</td></tr>
-            <tr><td><code>+prosesPengembalian()</code></td><td>Proses pengembalian: update status, cek keterlambatan, proses waitlist otomatis</td></tr>
-            <tr><td><code>+setujuiPeminjaman()</code></td><td>ACC permintaan pinjam: ubah status pending → dipinjam</td></tr>
-            <tr><td><code>+tolakPeminjaman()</code></td><td>Tolak permintaan pinjam: ubah status → rejected, bebaskan eksemplar</td></tr>
-            <tr><td><code>+cekTerlambat()</code></td><td>Cek apakah tanggal sekarang melewati batas pengembalian</td></tr>
-            <tr><td><code>+cekDigital()</code></td><td>Cek apakah tipe peminjaman = digital</td></tr>
-            <tr><td><code>+cekFisik()</code></td><td>Cek apakah tipe peminjaman = physical</td></tr>
-            <tr><td><code>+simpanProgressBaca(halaman)</code></td><td>Menyimpan halaman terakhir yang dibaca (untuk e-book)</td></tr>
+            // Render details in Explorer Tab
+            const classObj = classesData[className];
+            document.getElementById('explorerClassName').textContent = `Class: ${classObj.name}`;
+            document.getElementById('explorerClassDesc').textContent = classObj.desc;
 
-            <tr><td rowspan="2"><strong>DaftarTunggu</strong></td><td><code>+prosesAntrian()</code></td><td>Mengalokasikan eksemplar ke antrian berikutnya secara otomatis</td></tr>
-            <tr><td><code>+batalkanAntrian()</code></td><td>Membatalkan antrian dan mengubah status → cancelled</td></tr>
+            // Load attributes
+            const attrTable = document.getElementById('attributesTable');
+            attrTable.innerHTML = '';
+            classObj.attributes.forEach(attr => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span class="badge-vis ${attr.vis === '-' ? 'private' : 'public'}">${attr.vis}</span></td>
+                    <td class="name-cell">${attr.name}</td>
+                    <td><span class="badge-type">${attr.type}</span></td>
+                `;
+                attrTable.appendChild(row);
+            });
 
-            <tr><td rowspan="2"><strong>Favorit</strong></td><td><code>+tambahFavorit()</code></td><td>Menyimpan buku ke daftar favorit pengguna</td></tr>
-            <tr><td><code>+hapusFavorit()</code></td><td>Menghapus buku dari daftar favorit pengguna</td></tr>
+            // Load methods
+            const methTable = document.getElementById('methodsTable');
+            methTable.innerHTML = '';
+            if (classObj.methods && classObj.methods.length > 0) {
+                classObj.methods.forEach(method => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><span class="badge-vis public">${method.vis}</span></td>
+                        <td class="name-cell">${method.name}</td>
+                        <td><span class="badge-type">${method.type}</span></td>
+                    `;
+                    methTable.appendChild(row);
+                });
+            } else {
+                methTable.innerHTML = `<tr><td colspan="3" style="color: var(--text-muted); text-align: center; font-style: italic;">Tidak ada method khusus.</td></tr>`;
+            }
 
-            <tr><td rowspan="2"><strong>Pengaturan</strong></td><td><code>+ambilNilai(kunci, default)</code></td><td>Mengambil nilai konfigurasi berdasarkan kunci</td></tr>
-            <tr><td><code>+simpanPengaturan(kunci, nilai)</code></td><td>Menyimpan atau memperbarui nilai konfigurasi</td></tr>
-        </tbody>
-    </table>
+            // Load raw text
+            document.getElementById('rawUmlDisplay').textContent = classObj.raw;
+        }
 
-    <h2>Penjelasan Relasi</h2>
-    <table>
-        <thead><tr><th>No</th><th>Dari</th><th>Ke</th><th>Tipe</th><th>Foreign Key</th><th>Keterangan</th></tr></thead>
-        <tbody>
-            <tr><td>1</td><td>Kelas</td><td>Pengguna</td><td><span class="badge badge-1n">1:N</span></td><td>pengguna.kelas_id</td><td>Satu kelas memiliki banyak siswa</td></tr>
-            <tr><td>2</td><td>Pengguna</td><td>Peminjaman</td><td><span class="badge badge-1n">1:N</span></td><td>peminjaman.pengguna_id</td><td>Satu pengguna bisa punya banyak peminjaman</td></tr>
-            <tr><td>3</td><td>Pengguna</td><td>DaftarTunggu</td><td><span class="badge badge-1n">1:N</span></td><td>daftar_tunggu.pengguna_id</td><td>Satu pengguna bisa mengantri banyak buku</td></tr>
-            <tr><td>4</td><td>Pengguna</td><td>Favorit</td><td><span class="badge badge-1n">1:N</span></td><td>favorit.pengguna_id</td><td>Satu pengguna bisa memfavoritkan banyak buku</td></tr>
-            <tr><td>5</td><td>Kategori</td><td>Buku</td><td><span class="badge badge-1n">1:N</span></td><td>buku.kategori_id</td><td>Satu kategori menaungi banyak buku</td></tr>
-            <tr><td>6</td><td>Rak</td><td>Buku</td><td><span class="badge badge-1n">1:N</span></td><td>buku.rak_id</td><td>Satu rak menyimpan banyak buku</td></tr>
-            <tr><td>7</td><td>Penerbit</td><td>Buku</td><td><span class="badge badge-1n">1:N</span></td><td>buku.penerbit_id</td><td>Satu penerbit menerbitkan banyak buku</td></tr>
-            <tr><td>8</td><td>Buku</td><td>Penulis</td><td><span class="badge badge-mn">M:N</span></td><td>pivot buku_penulis</td><td>Satu buku bisa ditulis &ge;1 penulis, dan sebaliknya</td></tr>
-            <tr><td>9</td><td>Buku</td><td>EksemplarBuku</td><td><span class="badge badge-1n">1:N</span></td><td>eksemplar_buku.buku_id</td><td>Satu judul buku punya banyak salinan fisik</td></tr>
-            <tr><td>10</td><td>Buku</td><td>Peminjaman</td><td><span class="badge badge-1n">1:N</span></td><td>peminjaman.buku_id</td><td>Satu buku bisa dipinjam berkali-kali</td></tr>
-            <tr><td>11</td><td>Buku</td><td>DaftarTunggu</td><td><span class="badge badge-1n">1:N</span></td><td>daftar_tunggu.buku_id</td><td>Satu buku bisa punya banyak antrian</td></tr>
-            <tr><td>12</td><td>Buku</td><td>Favorit</td><td><span class="badge badge-1n">1:N</span></td><td>favorit.buku_id</td><td>Satu buku bisa difavoritkan banyak pengguna</td></tr>
-            <tr><td>13</td><td>EksemplarBuku</td><td>Peminjaman</td><td><span class="badge badge-1n">1:N</span></td><td>peminjaman.eksemplar_id</td><td>Satu eksemplar bisa dipakai di banyak transaksi bergantian</td></tr>
-        </tbody>
-    </table>
+        // Filtering search on sidebar
+        function filterClasses() {
+            const query = document.getElementById('classSearch').value.toLowerCase();
+            const items = document.getElementsByClassName('class-item');
+            
+            Array.from(items).forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if(text.includes(query)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
 
-    <h2>Keterangan Enum</h2>
-    <table>
-        <thead><tr><th>Atribut</th><th>Nilai yang Diizinkan</th></tr></thead>
-        <tbody>
-            <tr><td>Pengguna.peran</td><td><code>superadmin</code> · <code>admin</code> · <code>siswa</code></td></tr>
-            <tr><td>EksemplarBuku.status</td><td><code>tersedia</code> · <code>dipinjam</code> · <code>hilang</code> · <code>rusak</code></td></tr>
-            <tr><td>Peminjaman.status</td><td><code>dipinjam</code> · <code>dikembalikan</code> · <code>terlambat</code> · <code>booking</code> · <code>pending</code> · <code>cancelled</code></td></tr>
-            <tr><td>DaftarTunggu.status</td><td><code>waiting</code> · <code>assigned</code> · <code>cancelled</code></td></tr>
-        </tbody>
-    </table>
+        // Zoom controls for SVG
+        function adjustZoom(amount) {
+            currentZoom += amount;
+            if (currentZoom < 0.5) currentZoom = 0.5;
+            if (currentZoom > 2.0) currentZoom = 2.0;
+            document.getElementById('mermaidWrapper').style.transform = `scale(${currentZoom})`;
+        }
 
-    <div class="note">
-        <strong>Catatan Desain:</strong> Entitas <strong>Pengaturan</strong> berdiri sendiri tanpa relasi (tabel key-value untuk konfigurasi global). Tabel <strong>BukuPenulis</strong> adalah pivot table untuk relasi Many-to-Many antara Buku dan Penulis, tanpa method tersendiri.
-    </div>
-</div>
+        function resetZoom() {
+            currentZoom = 1.0;
+            document.getElementById('mermaidWrapper').style.transform = `scale(1.0)`;
+        }
 
-<script>
-    mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose', class: { useMaxWidth: false } });
-</script>
+        // Clipboard copying
+        function copyRawUml() {
+            const rawText = document.getElementById('rawUmlDisplay').textContent;
+            navigator.clipboard.writeText(rawText).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        // Initializer
+        window.addEventListener('DOMContentLoaded', () => {
+            loadClassList();
+            selectClass('User');
+        });
+    </script>
 </body>
 </html>
-
